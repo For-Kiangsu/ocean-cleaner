@@ -401,9 +401,9 @@ function App() {
             {/* ⭐ 核心修正：當角度 > 140 (握拳時) 亮紅燈，否則亮藍燈 */}
             <div style={{ 
               height: `${(armAngle / 180) * 100}%`, width: '100%', 
-              background: clawAngle > 110 ? 'linear-gradient(to top, #e53935, #ff8a80)' : 'linear-gradient(to top, #00acc1, #84ffff)',
+              background: clawAngle > 180 ? 'linear-gradient(to top, #e53935, #ff8a80)' : 'linear-gradient(to top, #00acc1, #84ffff)',
               borderRadius: '25px', transition: 'height 0.1s ease-out',
-              boxShadow: clawAngle > 110 ? '0 0 15px rgba(255, 23, 68, 0.5)' : '0 0 15px rgba(132, 255, 255, 0.5)'
+              boxShadow: clawAngle > 180 ? '0 0 15px rgba(255, 23, 68, 0.5)' : '0 0 15px rgba(132, 255, 255, 0.5)'
             }} />
             
             <div style={{ 
@@ -415,8 +415,8 @@ function App() {
               <div style={{ fontSize: '20px', color: '#84ffff' }}>{armAngle}°</div>
               <div style={{ marginTop: '15px', borderTop: '1px solid rgba(255,255,255,0.3)', paddingTop: '10px' }}>爪子</div>
               {/* ⭐ 核心修正：大於 140 度顯示夾緊，否則顯示張開 */}
-              <div style={{ fontSize: '16px', color: clawAngle > 110 ? '#ff8a80' : '#b2ebf2' }}>
-                {clawAngle > 110 ? "夾緊" : "張開"}
+              <div style={{ fontSize: '16px', color: clawAngle > 180 ? '#ff8a80' : '#b2ebf2' }}>
+                {clawAngle > 180 ? "夾緊" : "張開"}
               </div>
             </div>
           </div>
