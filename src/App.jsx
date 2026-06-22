@@ -416,7 +416,7 @@ function App() {
               <div style={{ marginTop: '15px', borderTop: '1px solid rgba(255,255,255,0.3)', paddingTop: '10px' }}>爪子</div>
               {/* ⭐ 核心修正：大於 140 度顯示夾緊，否則顯示張開 */}
               <div style={{ fontSize: '16px', color: clawAngle > 140 ? '#ff8a80' : '#b2ebf2' }}>
-                {clawAngle > 140 ? "夾緊" : "張開"}
+                {clawAngle > 140 ? "張開" : "夾緊"}
               </div>
             </div>
           </div>
