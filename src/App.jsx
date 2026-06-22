@@ -7,7 +7,7 @@ function App() {
   
   // 雙馬達與遊戲分數狀態
   const [armAngle, setArmAngle] = useState(90);   
-  // ⭐ 初始狀態改為 170（依據你相反的方向，170 為放開待命狀態）
+  // 初始狀態改為 170（安全張開待命狀態）
   const [clawAngle, setClawAngle] = useState(170); 
   const [score, setScore] = useState(0);           
   
@@ -123,11 +123,11 @@ function App() {
         calcArmAngle = Math.max(0, Math.min(180, Math.round(calcArmAngle)));
         setArmAngle(calcArmAngle);
 
-        // ⭐ 核心修正：利用正確的 110 與 170 對調，既能反向控制、又不會超出實體極限！
+        // 控制驅動角度：握拳為 180 度（夾緊），平手為 110 度（張開）
         if (gameState.playerHand.isFist) {
-          setClawAngle(180); // ✊ 握拳時：驅動至 110 度（實體效果變為「夾緊」）
+          setClawAngle(180); 
         } else {
-          setClawAngle(110); // ✋ 平手時：驅動至 170 度（實體效果變為「張開」，且不過度撐開）
+          setClawAngle(110); 
         }
 
         // 繪製手部骨架
@@ -392,18 +392,18 @@ function App() {
             )}
           </div>
 
-          {/* 右側機械臂數值條 (永遠工作) */}
+          {/* 右側機械臂數值條 */}
           <div style={{ 
             height: '500px', width: '100px', background: 'rgba(0, 0, 0, 0.3)', borderRadius: '30px', 
             border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.2)',
             position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '8px'
           }}>
-            {/* ⭐ 這裡的 UI 指示條邏輯也同步改為 < 140 亮紅燈（表示夾緊） */}
+            {/* ⭐ 核心修正：當角度 > 140 (握拳時) 亮紅燈，否則亮藍燈 */}
             <div style={{ 
               height: `${(armAngle / 180) * 100}%`, width: '100%', 
               background: clawAngle > 140 ? 'linear-gradient(to top, #e53935, #ff8a80)' : 'linear-gradient(to top, #00acc1, #84ffff)',
               borderRadius: '25px', transition: 'height 0.1s ease-out',
-              boxShadow: clawAngle < 140 ? '0 0 15px rgba(255, 138, 128, 0.5)' : '0 0 15px rgba(132, 255, 255, 0.5)'
+              boxShadow: clawAngle > 140 ? '0 0 15px rgba(255, 23, 68, 0.5)' : '0 0 15px rgba(132, 255, 255, 0.5)'
             }} />
             
             <div style={{ 
@@ -414,8 +414,8 @@ function App() {
               <div>高度</div>
               <div style={{ fontSize: '20px', color: '#84ffff' }}>{armAngle}°</div>
               <div style={{ marginTop: '15px', borderTop: '1px solid rgba(255,255,255,0.3)', paddingTop: '10px' }}>爪子</div>
-              {/* ⭐ UI 文字提示：小於 140 度代表夾緊 */}
-              <div style={{ fontSize: '16px', color: clawAngle < 140 ? '#ff8a80' : '#b2ebf2' }}>
+              {/* ⭐ 核心修正：大於 140 度顯示夾緊，否則顯示張開 */}
+              <div style={{ fontSize: '16px', color: clawAngle > 140 ? '#ff8a80' : '#b2ebf2' }}>
                 {clawAngle > 140 ? "夾緊" : "張開"}
               </div>
             </div>
