@@ -125,9 +125,9 @@ function App() {
 
         // ⭐ 核心修正：利用正確的 110 與 170 對調，既能反向控制、又不會超出實體極限！
         if (gameState.playerHand.isFist) {
-          setClawAngle(110); // ✊ 握拳時：驅動至 110 度（實體效果變為「夾緊」）
+          setClawAngle(170); // ✊ 握拳時：改為 170 度（實體效果變為「夾緊」）
         } else {
-          setClawAngle(170); // ✋ 平手時：驅動至 170 度（實體效果變為「張開」，且不過度撐開）
+          setClawAngle(110); // ✋ 平手時：改為 110 度（實體效果變為「張開」）
         }
 
         // 繪製手部骨架
@@ -401,9 +401,9 @@ function App() {
             {/* ⭐ 這裡的 UI 指示條邏輯也同步改為 < 140 亮紅燈（表示夾緊） */}
             <div style={{ 
               height: `${(armAngle / 180) * 100}%`, width: '100%', 
-              background: clawAngle < 140 ? 'linear-gradient(to top, #e53935, #ff8a80)' : 'linear-gradient(to top, #00acc1, #84ffff)',
+              background: clawAngle > 140 ? 'linear-gradient(to top, #e53935, #ff8a80)' : 'linear-gradient(to top, #00acc1, #84ffff)',
               borderRadius: '25px', transition: 'height 0.1s ease-out',
-              boxShadow: clawAngle < 140 ? '0 0 15px rgba(255, 138, 128, 0.5)' : '0 0 15px rgba(132, 255, 255, 0.5)'
+              boxShadow: clawAngle > 140 ? '0 0 15px rgba(255, 138, 128, 0.5)' : '0 0 15px rgba(132, 255, 255, 0.5)'
             }} />
             
             <div style={{ 
@@ -416,7 +416,7 @@ function App() {
               <div style={{ marginTop: '15px', borderTop: '1px solid rgba(255,255,255,0.3)', paddingTop: '10px' }}>爪子</div>
               {/* ⭐ UI 文字提示：小於 140 度代表夾緊 */}
               <div style={{ fontSize: '16px', color: clawAngle < 140 ? '#ff8a80' : '#b2ebf2' }}>
-                {clawAngle < 140 ? "夾緊" : "張開"}
+                {clawAngle > 140 ? "夾緊" : "張開"}
               </div>
             </div>
           </div>
