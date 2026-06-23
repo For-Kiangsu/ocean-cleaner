@@ -14,7 +14,7 @@ function App() {
 
   // 雙馬達與遊戲分數狀態
   const [armAngle, setArmAngle] = useState(90);   
-  const [clawAngle, setClawAngle] = useState(110); // 初始狀態設為 110 (依據新邏輯，110 為放開待命狀態)
+  const [clawAngle, setClawAngle] = useState(170); // 170 為放開待命狀態
   const [score, setScore] = useState(0);           
 
   // 獨立遊戲流程狀態
@@ -100,9 +100,7 @@ function App() {
 
       let calcArmAngle = 180 - ((wrist.y - 0.2) / 0.6) * 180;
       setArmAngle(Math.max(0, Math.min(180, Math.round(calcArmAngle))));
-      
-      // ⭐ 核心修正 1：對調角度值以符合實體機器人方向 (✊ 握拳時傳送 170 度，✋ 平手時傳送 110 度)
-      setClawAngle(gameState.playerHand.isFist ? 170 : 110); 
+      setClawAngle(gameState.playerHand.isFist ? 110 : 170); // ✊ 110度夾緊 / ✋ 170度張開
     };
 
     // 子功能 2: 繪製手部骨架
@@ -330,20 +328,16 @@ function App() {
 
           {/* 右側機械臂數值條 */}
           <div style={styles.statusBar}>
-            {/* ⭐ 核心修正 2：將條件改為 clawAngle > 140。當大於 140 (握拳 170 度) 時能量條亮紅燈表示夾緊 */}
             <div style={{ 
               height: `${(armAngle / 180) * 100}%`, width: '100%', 
-              background: clawAngle > 140 ? 'linear-gradient(to top, #e53935, #ff8a80)' : 'linear-gradient(to top, #00acc1, #84ffff)',
+              background: clawAngle < 140 ? 'linear-gradient(to top, #e53935, #ff8a80)' : 'linear-gradient(to top, #00acc1, #84ffff)',
               borderRadius: '25px', transition: 'height 0.1s ease-out',
             }} />
             <div style={styles.statusTextWrapper}>
               <div>高度</div>
               <div style={{ fontSize: '20px', color: '#84ffff' }}>{armAngle}°</div>
               <div style={{ marginTop: '15px', borderTop: '1px solid rgba(255,255,255,0.3)', paddingTop: '10px' }}>爪子</div>
-              {/* ⭐ 核心修正 3：文字與色彩判斷改為 > 140，讓畫面正確顯示 夾緊 / 張開 */}
-              <div style={{ fontSize: '16px', color: clawAngle > 140 ? '#ff8a80' : '#b2ebf2' }}>
-                {clawAngle > 140 ? "夾緊" : "張開"}
-              </div>
+              <div style={{ fontSize: '16px', color: clawAngle < 140 ? '#ff8a80' : '#b2ebf2' }}>{clawAngle < 140 ? "夾緊" : "張開"}</div>
             </div>
           </div>
         </div>
@@ -353,7 +347,7 @@ function App() {
   );
 }
 
-// 內聯樣式物件
+// 提取內聯樣式成獨立物件，讓程式更簡潔
 const styles = {
   container: { minHeight: '100vh', background: 'linear-gradient(135deg, #001f3f 0%, #006064 100%)', textAlign: 'center', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', padding: '40px 20px', color: '#ffffff', position: 'relative', overflow: 'hidden' },
   bgOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, pointerEvents: 'none', opacity: 0.1, background: 'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8), transparent 60%)' },
